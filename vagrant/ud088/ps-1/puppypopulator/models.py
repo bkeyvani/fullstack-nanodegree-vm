@@ -24,7 +24,7 @@ class Shelter(Base):
         return "<Shelter: %r>" % self.name
 
 
-association_table = Table('associatio', Base.metadata,
+association_table = Table('association', Base.metadata,
         Column('puppy_id', Integer, ForeignKey('puppy.id')),
         Column('adopter_id', Integer, ForeignKey('adopter.id')))
 
@@ -40,11 +40,12 @@ class Puppy(Base):
     date_of_birth = Column(Date, nullable=False)
     bread = Column(String(80))
     gender = Column(String(10), nullable=False)
+    picture = Column(String(255))
     weight = Column(Float(5))
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     shelter = relationship("Shelter")
     profile = relationship("Profile", uselist=False, backref="profile")
-    adopters = relationship("adopter",
+    adopters = relationship("Adopter",
             secondary=association_table,
             backref="puppy")
 
