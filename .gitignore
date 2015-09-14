@@ -8,3 +8,6 @@
 
 # python compiled files
 *.pyc
+
+# db files
+*.db
