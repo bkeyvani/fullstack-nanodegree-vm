@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 Base = declarative_base()
 
@@ -19,10 +20,23 @@ class Shelter(Base):
     state = Column(String(80))
     zipcode = Column(String(10))
     website = Column(String(255))
+    maximum_capacity = Column(Integer)
+    current_occupancy = Column(Integer)
 
     def __repr__(self):
         return "<Shelter: %r>" % self.name
 
+    @hybrid_method
+    def get_capacity(self):
+        return self.maximum_capacity - self.current_occupancy
+
+    @hybrid_method
+    def set_max_capacity(self, n):
+        self.maximum_capacity = n
+
+    @hybrid_method
+    def set_occupancy(self, n):
+        self.current_occupancy = n
 
 association_table = Table('association', Base.metadata,
         Column('puppy_id', Integer, ForeignKey('puppy.id')),
