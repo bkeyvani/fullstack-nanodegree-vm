@@ -38,7 +38,7 @@ class Shelter(Base):
     def set_occupancy(self, n):
         self.current_occupancy = n
 
-association_table = Table('association', Base.metadata,
+association_table = Table('puppy_adopter', Base.metadata,
         Column('puppy_id', Integer, ForeignKey('puppy.id')),
         Column('adopter_id', Integer, ForeignKey('adopter.id')))
 
