@@ -34,6 +34,18 @@ class Movie(Base):
     # many-to-many Movie<->Genre
     genres = relationship("Genre", secondary=movie_genres, backref="movies")
 
+    def __init__(self, title, poster_image_url, trailer_youtube_url, storyline,
+            mpaa_rating_id, duration, release_date, imdb_id="", rotten_id=""):
+        self.title = title
+        self.poster_image_url = poster_image_url
+        self.trailer_youtube_url = trailer_youtube_url
+        self.storyline = storyline
+        self.mpaa_rating_id = mpaa_rating_id
+        self.duration = duration
+        self.release_date = release_date
+        self.imdb_id = imdb_id
+        self.rotten_id = rotten_id
+
     def __repr__(self):
         return "<Movie: %r>" % self.title
 
@@ -47,8 +59,11 @@ class Genre(Base):
     id = Column(Integer, primary_key=True)
     genre = Column(String(20), nullable=False, unique=True)
 
+    def __init__(self, genre):
+        self.genre = genre
+
     def __repr__(self):
-        return "<Genre: %r>" % self.name
+        return "<Genre: %r>" % self.genre
 
 
 class MPAARatings(Base):
@@ -61,8 +76,11 @@ class MPAARatings(Base):
     rating = Column(String(10), nullable=False, unique=True)
     movies = relationship("Movie")
 
+    def __init__(self, rating):
+        self.rating = rating
+
     def __repr__(self):
-        return "<Rating: %r>" % self.name
+        return "<Rating: %r>" % self.rating
 
 engine = create_engine('sqlite:///movies.db')
 Base.metadata.create_all(engine)
