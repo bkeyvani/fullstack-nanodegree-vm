@@ -28,6 +28,9 @@ for i, r in enumerate(ratings):
     session.add(new_r)
     session.commit()
 
+# genre query object
+gq = session.query(Genre)
+
 # Add Movies
 m1 = Movie(
     title="The Dark Knight",
@@ -40,6 +43,11 @@ m1 = Movie(
     imdb_id="tt0468569",
     rotten_id="the_dark_knight")
 
+# Add Genres
+m1.genres.append(gq.filter_by(genre='Action').one())
+m1.genres.append(gq.filter_by(genre='Crime').one())
+m1.genres.append(gq.filter_by(genre='Drama').one())
+
 m2 = Movie(
     title="Watchmen",
     poster_image_url="https://upload.wikimedia.org/wikipedia/en/b/bc/Watchmen_film_poster.jpg",
@@ -50,6 +58,11 @@ m2 = Movie(
     release_date=datetime.date(2009, 3, 6),
     imdb_id="tt0409459",
     rotten_id="watchmen")
+
+# Add Genres
+m2.genres.append(gq.filter_by(genre='Action').one())
+m2.genres.append(gq.filter_by(genre='Mystery').one())
+m2.genres.append(gq.filter_by(genre='Sci-Fi').one())
 
 m3 = Movie(
     title="The Shawshank Redemption",
@@ -62,6 +75,10 @@ m3 = Movie(
     imdb_id="tt0111161",
     rotten_id="shawshank_redemption")
 
+# Add Genres
+m3.genres.append(gq.filter_by(genre='Crime').one())
+m3.genres.append(gq.filter_by(genre='Drama').one())
+
 m4 = Movie(
     title="The Prestige",
     poster_image_url="https://upload.wikimedia.org/wikipedia/en/d/d2/Prestige_poster.jpg",
@@ -72,6 +89,11 @@ m4 = Movie(
     release_date=datetime.date(2006, 10, 20),
     imdb_id="tt0482571",
     rotten_id="prestige")
+
+# Add Genres
+m4.genres.append(gq.filter_by(genre='Drama').one())
+m4.genres.append(gq.filter_by(genre='Mystery').one())
+m4.genres.append(gq.filter_by(genre='Thriller').one())
 
 m5 = Movie(
     title="The Illusionist",
@@ -84,6 +106,11 @@ m5 = Movie(
     imdb_id="tt0443543",
     rotten_id="illusionist")
 
+# Add Genres
+m5.genres.append(gq.filter_by(genre='Drama').one())
+m5.genres.append(gq.filter_by(genre='Mystery').one())
+m5.genres.append(gq.filter_by(genre='Romance').one())
+
 m6 = Movie(
     title="Sherlock Holmes: A Game of Shadows",
     poster_image_url="https://upload.wikimedia.org/wikipedia/en/5/53/Sherlock_Holmes2Poster.jpg",
@@ -95,27 +122,10 @@ m6 = Movie(
     imdb_id="tt1515091",
     rotten_id="sherlock_holmes_a_game_of_shadows")
 
+# Add Genres
+m6.genres.append(gq.filter_by(genre='Action').one())
+m6.genres.append(gq.filter_by(genre='Adventure').one())
+m6.genres.append(gq.filter_by(genre='Crime').one())
+
 session.add_all([m1, m2, m3, m4, m5, m6])
-
-# Add Movie Genres
-session.execute(movie_genres.insert().values([
-    (1, 1),
-    (1, 6),
-    (1, 8),
-    (2, 1),
-    (2, 16),
-    (2, 20),
-    (3, 6),
-    (3, 8),
-    (4, 8),
-    (4, 16),
-    (4, 24),
-    (5, 8),
-    (5, 16),
-    (5, 19),
-    (6, 1),
-    (6, 2),
-    (6, 6),
-]))
-
 session.commit()
