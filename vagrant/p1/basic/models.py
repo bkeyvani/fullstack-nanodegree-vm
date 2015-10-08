@@ -31,6 +31,9 @@ class Movie(Base):
     imdb_id = Column(String(80))
     rotten_id = Column(String(80))
 
+    # one-to-one Movie<->MPAA Rating
+    mpaa_rating = relationship("MPAARatings")
+
     # many-to-many Movie<->Genre
     genres = relationship("Genre", secondary=movie_genres, backref="movies")
 
