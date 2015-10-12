@@ -16,3 +16,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 q = session.query(Movie)
+movies = q.all()
+
+# generate html page
+open_movies_page(movies)
