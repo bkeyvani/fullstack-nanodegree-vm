@@ -56,6 +56,36 @@ main_page_head = '''
             top: 0;
             background-color: white;
         }
+        .left-col {
+            float: left;
+        }
+        .right-col {
+            padding-left: 230px;
+        }
+        .right-col h2 {
+            margin-top: 0px;
+        }
+        .movie-info {
+            border-bottom: 1px solid #aaa;
+        }
+        .release-date {
+            border-bottom: 1px solid #aaa;
+            margin-top: 10px;
+        }
+        .storyline {
+            margin-top: 10px;
+        }
+        .trailer-link {
+            margin-top: 10px;
+        }
+        .links {
+            bottom: 0px;
+            position: absolute;
+        }
+        .imdb {
+            float: left;
+            margin-right: 5px;
+        }
     </style>
     <script type="text/javascript" charset="utf-8">
         // Pause the video when the modal is closed
@@ -65,7 +95,7 @@ main_page_head = '''
             $("#trailer-video-container").empty();
         });
         // Start playing the video whenever the trailer modal is opened
-        $(document).on('click', '.movie-tile', function (event) {
+        $(document).on('click', '.trailer', function (event) {
             var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
             var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
             $("#trailer-video-container").empty().append($("<iframe></iframe>", {
@@ -122,9 +152,35 @@ main_page_content = '''
 
 # A single movie entry html template
 movie_tile_content = '''
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+<div class="col-sm-12 col-lg-6 movie-tile">
+  <div class="left-col">
     <img src="{poster_image_url}" width="220" height="342">
+  </div>
+  <div class="right-col">
     <h2>{movie_title}</h2>
+    <div class="movie-info">
+      <span>{mpaa_rating}</span>
+      |
+      <span>{duration} min.</span>
+      |
+      <span>{g1}, {g2}, {g3}</span>
+    </div>
+    <div class="release-date">Release Date: <span>{release_date}</span></div>
+    <div class="storyline">{storyline}</div>
+    <div class="trailer-link">
+      <a class="btn btn-info btn-sm trailer" href="#" role="button"
+        data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">Watch Movie Trailer</a>
+    </div>
+    <div class="links">
+      <span class="link imdb">
+        <a class="btn btn-primary btn-sm" href="http://www.imdb.com/title/{imdb_id}" role="button" target="_blank">IMDB</a>
+      </span>
+      <span class="link rotten">
+        <a class="btn btn-primary btn-sm" href="http://www.rottentomatoes.com/m/{rotten_id}" role="button" target="_blank">Rotten Tomatos</a>
+      </span>
+    </div>
+  </div>
+  <div class="clearfix"></div>
 </div>
 '''
 
@@ -141,11 +197,25 @@ def create_movie_tiles_content(movies):
         trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
                               else None)
 
+        g1 = movie.genres[0].genre
+        g2 = movie.genres[1].genre
+        # set thrid genre to '...' if movie lacks 3rd genre
+        g3 = movie.genres[2].genre if len(movie.genres) > 2 else '...'
+
         # Append the tile for the movie with its content filled in
         content += movie_tile_content.format(
             movie_title=movie.title,
             poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id
+            trailer_youtube_id=trailer_youtube_id,
+            storyline=movie.storyline,
+            mpaa_rating=movie.mpaa_rating.rating,
+            duration=movie.duration,
+            release_date=movie.release_date,
+            imdb_id=movie.imdb_id,
+            rotten_id=movie.rotten_id,
+            g1=g1,
+            g2=g2,
+            g3=g3,
         )
     return content
 
